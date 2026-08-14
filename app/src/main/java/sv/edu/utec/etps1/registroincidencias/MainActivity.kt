@@ -42,28 +42,33 @@ fun RegistroIncidenciasApp() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Registro de incidencias",
+            text = "Mesa de Ayuda TI",
             style = MaterialTheme.typography.headlineMedium
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = "Reporta y da seguimiento a problemas de equipos, " +
-                    "infraestructura o servicios."
+            text = "Solicita asistencia técnica para equipos de cómputo, " +
+                    "software de laboratorio o accesos a la red."
         )
         Spacer(modifier = Modifier.height(24.dp))
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Estado inicial",
+                    text = "Estado de red y servidores",
                     style = MaterialTheme.typography.titleMedium
                 )
-                Text(text = "Aún no hay incidencias registradas.")
+                Text(text = "Todos los sistemas operan con normalidad.")
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = { /* Se implementará en una unidad posterior */ }) {
-            Text(text = "Crear reporte")
+            Text(text = "Abrir ticket de soporte")
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Prototipo inicial — Unidad 1",
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }
 
