@@ -84,10 +84,14 @@ fun RegistroIncidenciasApp() {
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
-                mensaje = if (titulo.isNotBlank()) {
+                mensaje = if (titulo.isNotBlank() && descripcion.isNotBlank()) {
                     "Reporte preparado: $titulo"
-                } else {
+                } else if (titulo.isBlank() && descripcion.isBlank()) {
+                    "Por favor, escribe un título y una descripción"
+                } else if (titulo.isBlank()) {
                     "Por favor, escribe un título primero"
+                } else {
+                    "Por favor, escribe una descripción"
                 }
             },
             modifier = Modifier.fillMaxWidth()
