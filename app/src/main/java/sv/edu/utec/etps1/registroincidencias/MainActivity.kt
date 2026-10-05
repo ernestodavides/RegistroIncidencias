@@ -3,13 +3,16 @@ package sv.edu.utec.etps1.registroincidencias
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -26,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import sv.edu.utec.etps1.registroincidencias.ui.theme.RegistroIncidenciasTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +48,7 @@ fun RegistroIncidenciasApp() {
     var titulo by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
     var mensaje by remember { mutableStateOf("Aún no hay reporte creado") }
+    var prioridad by remember { mutableStateOf("Baja") }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -71,7 +77,11 @@ fun RegistroIncidenciasApp() {
             onValueChange = { titulo = it },
             label = { Text("Título de la incidencia") },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                imeAction = ImeAction.Next
+            )
         )
         Spacer(modifier = Modifier.height(12.dp))
         OutlinedTextField(
@@ -79,13 +89,48 @@ fun RegistroIncidenciasApp() {
             onValueChange = { descripcion = it },
             label = { Text("Descripción breve") },
             modifier = Modifier.fillMaxWidth(),
-            minLines = 3
+            minLines = 3,
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                imeAction = ImeAction.Done
+            )
         )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Seleccione la prioridad:",
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.align(Alignment.Start)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            listOf("Baja", "Media", "Alta").forEach { nivel ->
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { prioridad = nivel },
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (prioridad == nivel)
+                            MaterialTheme.colorScheme.primaryContainer
+                        else
+                            MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    Text(
+                        text = nivel,
+                        modifier = Modifier.padding(12.dp),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+        }
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
                 mensaje = if (titulo.isNotBlank() && descripcion.isNotBlank()) {
-                    "Reporte preparado: $titulo"
+                    "Reporte preparado: $titulo (Prioridad: $prioridad)"
                 } else if (titulo.isBlank() && descripcion.isBlank()) {
                     "Por favor, escribe un título y una descripción"
                 } else if (titulo.isBlank()) {
@@ -112,7 +157,7 @@ fun RegistroIncidenciasApp() {
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Prototipo Interfaz con estado — Unidad 2",
+            text = "Prototipo teclado y pantalla táctil — Unidad 3",
             style = MaterialTheme.typography.bodySmall
         )
     }
