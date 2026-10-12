@@ -36,7 +36,7 @@ Reporta y da seguimiento a problemas de equipos, infraestructura o servicios.
 * [x] Campos de entrada interactivos para `título` y `descripción` con manejo de estados (`remember` y `mutableStateOf`).
 * [x] Botón interactivo "Crear reporte" con validación de campos vacíos.
 * [x] Componente `Card` dinámico para la visualización del estado o mensaje del reporte generado.
-
+* [x] Integración inicial de sensores del dispositivo (sensor acelerómetro) mediante el uso de SensorManager, SensorEventListener y DisposableEffect en Jetpack Compose, permitiendo capturar y mostrar dinámicamente los valores de los ejes X, Y y Z en tiempo real.
 ## Cómo abrir el proyecto en Android Studio
 
 1. Asegúrate de tener instalado Android Studio y Git.

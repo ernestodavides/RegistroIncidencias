@@ -31,6 +31,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.ui.platform.LocalContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +57,32 @@ fun RegistroIncidenciasApp() {
     var descripcion by remember { mutableStateOf("") }
     var mensaje by remember { mutableStateOf("Aún no hay reporte creado") }
     var prioridad by remember { mutableStateOf("Baja") }
+    val context = LocalContext.current
+    val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
+    val accelerometer = remember { sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) }
+    var aceleracionX by remember { mutableFloatStateOf(0f) }
+    var aceleracionY by remember { mutableFloatStateOf(0f) }
+    var aceleracionZ by remember { mutableFloatStateOf(0f) }
+
+    DisposableEffect(accelerometer) {
+        val listener = object : SensorEventListener {
+            override fun onSensorChanged(event: SensorEvent) {
+                aceleracionX = event.values[0]
+                aceleracionY = event.values[1]
+                aceleracionZ = event.values[2]
+            }
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+        }
+        if (accelerometer != null) {
+            sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+        onDispose {
+            if (accelerometer != null) {
+                sensorManager.unregisterListener(listener)
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -126,6 +160,24 @@ fun RegistroIncidenciasApp() {
                 }
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(text = "Estado del Acelerómetro:", style = MaterialTheme.typography.bodyMedium)
+                if (accelerometer != null) {
+                    Text(text = "Eje X: $aceleracionX")
+                    Text(text = "Eje Y: $aceleracionY")
+                    Text(text = "Eje Z: $aceleracionZ")
+                } else {
+                    Text(text = "Sensor acelerómetro no disponible en este dispositivo.")
+                }
+            }
+        }
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
@@ -157,7 +209,7 @@ fun RegistroIncidenciasApp() {
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Prototipo teclado y pantalla táctil — Unidad 3",
+            text = "Prototipo sensor acelerómetro — Unidad 3",
             style = MaterialTheme.typography.bodySmall
         )
     }
