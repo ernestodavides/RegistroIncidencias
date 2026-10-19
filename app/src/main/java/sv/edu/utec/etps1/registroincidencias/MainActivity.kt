@@ -170,11 +170,23 @@ fun RegistroIncidenciasApp() {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(text = "Estado del Acelerómetro:", style = MaterialTheme.typography.bodyMedium)
                 if (accelerometer != null) {
-                    Text(text = "Eje X: $aceleracionX")
-                    Text(text = "Eje Y: $aceleracionY")
-                    Text(text = "Eje Z: $aceleracionZ")
+                    val interpretacion = when {
+                        kotlin.math.abs(aceleracionZ) > 9.0 -> "Dispositivo estable / Superficie plana"
+                        kotlin.math.abs(aceleracionX) > 4.0 || kotlin.math.abs(aceleracionY) > 4.0 -> "Movimiento o inclinación detectada"
+                        else -> "En uso activo / Movimiento leve"
+                    }
+                    Text(text = "Interpretación: $interpretacion",
+                         style = MaterialTheme.typography.bodyMedium,
+                         color = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(text = "Eje X: ${String.format(java.util.Locale.getDefault(), "%.2f", aceleracionX)}")
+                    Text(text = "Eje Y: ${String.format(java.util.Locale.getDefault(), "%.2f", aceleracionY)}")
+                    Text(text = "Eje Z: ${String.format(java.util.Locale.getDefault(), "%.2f", aceleracionZ)}")
                 } else {
-                    Text(text = "Sensor acelerómetro no disponible en este dispositivo.")
+                    Text(text = "Sensor acelerómetro no disponible en este dispositivo.",
+                         color = MaterialTheme.colorScheme.error
+                    )
                 }
             }
         }
