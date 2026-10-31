@@ -36,19 +36,28 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.platform.LocalContext
 
 class MainActivity : ComponentActivity() {
+    private val tag = "TPIS1_LIFECYCLE"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(tag, "onCreate")
         setContent {
             RegistroIncidenciasTheme {
                 RegistroIncidenciasApp()
             }
         }
     }
+
+    override fun onStart() { super.onStart(); Log.d(tag, "onStart") }
+    override fun onResume() { super.onResume(); Log.d(tag, "onResume") }
+    override fun onPause() { Log.d(tag, "onPause"); super.onPause() }
+    override fun onStop() { Log.d(tag, "onStop"); super.onStop() }
+    override fun onDestroy() { Log.d(tag, "onDestroy"); super.onDestroy() }
 }
 
 @Composable
@@ -58,13 +67,13 @@ fun RegistroIncidenciasApp() {
     var mensaje by remember { mutableStateOf("Aún no hay reporte creado") }
     var prioridad by remember { mutableStateOf("Baja") }
     val context = LocalContext.current
-    val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
-    val accelerometer = remember { sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) }
+    val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager }
+    val accelerometer = remember { sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) }
     var aceleracionX by remember { mutableFloatStateOf(0f) }
     var aceleracionY by remember { mutableFloatStateOf(0f) }
     var aceleracionZ by remember { mutableFloatStateOf(0f) }
 
-    DisposableEffect(accelerometer) {
+    DisposableEffect(sensorManager, accelerometer) {
         val listener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
                 aceleracionX = event.values[0]
@@ -73,11 +82,11 @@ fun RegistroIncidenciasApp() {
             }
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
         }
-        if (accelerometer != null) {
+        if (sensorManager != null && accelerometer != null) {
             sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
         }
         onDispose {
-            if (accelerometer != null) {
+            if (sensorManager != null && accelerometer != null) {
                 sensorManager.unregisterListener(listener)
             }
         }
