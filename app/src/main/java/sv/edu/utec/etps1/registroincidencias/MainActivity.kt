@@ -39,6 +39,7 @@ import android.hardware.SensorManager
 import android.util.Log
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 
 class MainActivity : ComponentActivity() {
@@ -62,10 +63,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun RegistroIncidenciasApp() {
-    var titulo by remember { mutableStateOf("") }
-    var descripcion by remember { mutableStateOf("") }
-    var mensaje by remember { mutableStateOf("Aún no hay reporte creado") }
-    var prioridad by remember { mutableStateOf("Baja") }
+    var titulo by rememberSaveable { mutableStateOf("") }
+    var descripcion by rememberSaveable { mutableStateOf("") }
+    var mensaje by rememberSaveable { mutableStateOf("Aún no hay reporte creado") }
+    var prioridad by rememberSaveable { mutableStateOf("Baja") }
     val context = LocalContext.current
     val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager }
     val accelerometer = remember { sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) }
@@ -230,7 +231,7 @@ fun RegistroIncidenciasApp() {
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Prototipo sensor acelerómetro — Unidad 3",
+            text = "Registro de Incidencias — Unidad 4",
             style = MaterialTheme.typography.bodySmall
         )
     }

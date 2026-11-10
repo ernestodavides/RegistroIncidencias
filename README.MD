@@ -39,6 +39,7 @@ Reporta y da seguimiento a problemas de equipos, infraestructura o servicios.
 * [x] Integración inicial de sensores del dispositivo (sensor acelerómetro) mediante el uso de SensorManager, SensorEventListener y DisposableEffect en Jetpack Compose, permitiendo capturar y mostrar dinámicamente los valores de los ejes X, Y y Z en tiempo real.
 * [x] Interpretación Semántica: Conversión de lecturas numéricas brutas a estados claros y legibles para el usuario
 * [x] Manejo de Disponibilidad: Validación condicional para verificar si el sensor se encuentra disponible en el dispositivo físico o emulador, mostrando un mensaje claro en caso contrario.
+* [x] Análisis del comportamiento de `remember` frente a `rememberSaveable`
 
 ## Cómo abrir el proyecto en Android Studio
 
