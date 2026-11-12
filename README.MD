@@ -1,4 +1,4 @@
-# Regtisto de incidencias
+# Registro de incidencias
 
 Reporta y da seguimiento a problemas de equipos, infraestructura o servicios.
 
@@ -23,7 +23,7 @@ Reporta y da seguimiento a problemas de equipos, infraestructura o servicios.
 * `androidx.appcompat:appcompat` (v1.6.1)
 * `com.google.android.material:material` (v1.10.0)
 * `androidx.compose.runtime:runtime` (v1.12.0)
-
+* `androidx.lifecycle:lifecycle-viewmodel-compose` (v2.8.0)
 
 * **Pruebas (Testing)**: JUnit (v4.13.2), Espresso (v3.5.1), AndroidX JUnit (v1.1.5)
 * **Control de versiones**: Git y GitHub
@@ -40,6 +40,7 @@ Reporta y da seguimiento a problemas de equipos, infraestructura o servicios.
 * [x] Interpretación Semántica: Conversión de lecturas numéricas brutas a estados claros y legibles para el usuario
 * [x] Manejo de Disponibilidad: Validación condicional para verificar si el sensor se encuentra disponible en el dispositivo físico o emulador, mostrando un mensaje claro en caso contrario.
 * [x] Análisis del comportamiento de `remember` frente a `rememberSaveable`
+* [x] Implementación de `IncidenciaViewModel` para la gestión y persistencia del estado de pantalla en `título` y `prioridad`.
 
 ## Cómo abrir el proyecto en Android Studio
 

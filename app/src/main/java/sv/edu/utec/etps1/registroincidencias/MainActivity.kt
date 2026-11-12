@@ -41,6 +41,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 class MainActivity : ComponentActivity() {
     private val tag = "TPIS1_LIFECYCLE"
@@ -62,11 +63,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun RegistroIncidenciasApp() {
-    var titulo by rememberSaveable { mutableStateOf("") }
+fun RegistroIncidenciasApp(vm: IncidenciaViewModel = viewModel()) {
     var descripcion by rememberSaveable { mutableStateOf("") }
     var mensaje by rememberSaveable { mutableStateOf("Aún no hay reporte creado") }
-    var prioridad by rememberSaveable { mutableStateOf("Baja") }
     val context = LocalContext.current
     val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager }
     val accelerometer = remember { sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) }
@@ -117,8 +116,8 @@ fun RegistroIncidenciasApp() {
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
-            value = titulo,
-            onValueChange = { titulo = it },
+            value = vm.titulo,
+            onValueChange = { vm.actualizarTitulo(it) },
             label = { Text("Título de la incidencia") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
@@ -154,9 +153,9 @@ fun RegistroIncidenciasApp() {
                 Card(
                     modifier = Modifier
                         .weight(1f)
-                        .clickable { prioridad = nivel },
+                        .clickable { vm.actualizarPrioridad(nivel) },
                     colors = CardDefaults.cardColors(
-                        containerColor = if (prioridad == nivel)
+                        containerColor = if (vm.prioridad == nivel)
                             MaterialTheme.colorScheme.primaryContainer
                         else
                             MaterialTheme.colorScheme.surfaceVariant
@@ -203,11 +202,11 @@ fun RegistroIncidenciasApp() {
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
-                mensaje = if (titulo.isNotBlank() && descripcion.isNotBlank()) {
-                    "Reporte preparado: $titulo (Prioridad: $prioridad)"
-                } else if (titulo.isBlank() && descripcion.isBlank()) {
+                mensaje = if (vm.titulo.isNotBlank() && descripcion.isNotBlank()) {
+                    "Reporte preparado: ${vm.titulo} (Prioridad: ${vm.prioridad})"
+                } else if (vm.titulo.isBlank() && descripcion.isBlank()) {
                     "Por favor, escribe un título y una descripción"
-                } else if (titulo.isBlank()) {
+                } else if (vm.titulo.isBlank()) {
                     "Por favor, escribe un título primero"
                 } else {
                     "Por favor, escribe una descripción"
